@@ -2,7 +2,7 @@
 <resources>
 	<application name="Wearable">
 		<serviceProfile
-				id="/example/watch"
+				id="/example/companion"
 				name="Wearable"
 				role="consumer"
 				

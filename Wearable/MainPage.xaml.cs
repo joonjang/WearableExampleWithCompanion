@@ -23,18 +23,46 @@ namespace Wearable
         public MainPage()
         {
             InitializeComponent();
+            BindingContext = this;
         }
 
-        private void Button_Clicked(object sender, EventArgs e)
+        private void Button_Clicked_Connect(object sender, EventArgs e)
         {
             Connect();
         }
 
+        private void Button_Clicked_LaunchStore(object sender, EventArgs e)
+        {
+            DeepLinkLaunchStore();
+        }
+
+        private void Button_Clicked_Send(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Peer != null)
+                {
+                    Connection.Send(ChannelId, Encoding.UTF8.GetBytes("Hello from watch!"));
+                    ShowMessage("Sent to phone");
+                }
+                else
+                {
+                    ShowMessage("Connect to phone first");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("SendMessage error: " + ex);
+            }
+        }
+
+        // connect to phone using the Samsung.SAP nuget package
         private async void Connect()
         {
             try
             {
-                Agent = await Agent.GetAgent("/joonspetproject/fit");
+                Agent = await Agent.GetAgent("/example/companion");
                 var peers = await Agent.FindPeers();
                 ChannelId = Agent.Channels.First().Value;
                 if (peers.Count() > 0)
@@ -58,15 +86,25 @@ namespace Wearable
             }
         }
 
-        // broadcaster that looks for messages
+        // broadcaster that looks for messages from phone
         private void Connection_DataReceived(object sender, DataReceivedEventArgs e)
         {
             ShowMessage("Message received");
-            string receivedJson = System.Text.Encoding.ASCII.GetString(e.Data);
-
+            ReceivedMessage = System.Text.Encoding.ASCII.GetString(e.Data);
         }
 
+        private string receivedMessage = "Label will show message from phone";
+        public string ReceivedMessage
+        {
+            get => receivedMessage;
+            set
+            {
+                receivedMessage = value;
+                OnPropertyChanged();
+            }
+        }
 
+        // toast to show messages
         private void ShowMessage(string message, string debugLog = null)
         {
             Toast.DisplayText(message, 1000);
@@ -94,27 +132,11 @@ namespace Wearable
             {
                 Console.WriteLine("Store launch error: " + e);
             }
-
         }
 
-
-        private void DeepLinkLaunchApp()
+        private void Button_Clicked(object sender, EventArgs e)
         {
-            AppControl launchControl = new AppControl();
-            launchControl.Operation = AppControlOperations.Default;
-            launchControl.ApplicationId = "com.samsung.w-manager-service";
-            launchControl.ExtraData.Add("deeplink", "joonspetproject://fit");
-            launchControl.ExtraData.Add("type", "phone");
 
-            try
-            {
-                AppControl.SendLaunchRequest(launchControl);
-                Console.WriteLine("Send Launch Request SENT");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("LaunchApp error: " + e);
-            }
         }
     }
 }

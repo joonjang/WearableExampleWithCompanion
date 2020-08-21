@@ -12,6 +12,7 @@
     <privileges>
         <privilege>http://developer.samsung.com/tizen/privilege/accessoryprotocol</privilege>
         <privilege>http://tizen.org/privilege/appmanager.launch</privilege>
+        <privilege>http://tizen.org/privilege/bluetooth</privilege>
     </privileges>
     <dependencies />
     <provides-appdefined-privileges />

@@ -3,12 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:c="clr-namespace:Tizen.Wearable.CircularUI.Forms;assembly=Tizen.Wearable.CircularUI.Forms"
              x:Class="Wearable.MainPage">
+
     <c:CirclePage.Content>
-        <StackLayout>
+
+        <StackLayout VerticalOptions="CenterAndExpand">
             <Button Text="Connect"
-          VerticalOptions="CenterAndExpand"
-          HorizontalOptions="CenterAndExpand" 
-              Clicked="Button_Clicked"/>
+              VerticalOptions="CenterAndExpand"
+              HorizontalOptions="CenterAndExpand" 
+              Clicked="Button_Clicked_Connect"/>
+            <Button Text="Launch Store"
+              VerticalOptions="CenterAndExpand"
+              HorizontalOptions="CenterAndExpand" 
+              Clicked="Button_Clicked_LaunchStore"/>
+            <Button Text="Message to phone" Clicked="Button_Clicked_Send"/>
+            <Label Text="{Binding ReceivedMessage}" HorizontalTextAlignment="Center"/>
         </StackLayout>
     </c:CirclePage.Content>
 </c:CirclePage>
